@@ -108,40 +108,42 @@ function renderInteractiveApology(template, values) {
       mainImg.src = img;
       console.log('Panda Apology: image changed to:', img); // Debugging log
     }
-
-    // 让"和好"按钮变大
+    // "和好"按钮变大
     if (!isFullScreen) {
       acceptScale += 0.5;
-      if (acceptScale > 3) {
-        isFullScreen = true;
-        setAcceptButtonFullScreen(acceptBtn, centerBox, topWord, mainImg, mainTitle, rejectBtn);
-      } else {
-        acceptBtn.style.transform = `scale(${acceptScale})`;
-        centerBox.style.overflow = 'visible';
-        console.log('Panda Apology: Accept button scale:', acceptScale); // Debugging log
-      }
+      acceptBtn.style.transform = `scale(${acceptScale})`;
+      centerBox.style.overflow = 'visible';
+      console.log('Panda Apology: Accept button scale:', acceptScale); // Debugging log
     }
   });
 
-  // "和好"按钮全屏后点击，按钮消失，仅显示图片和message，内容居中适配移动端
+  // "和好"按钮随时可点击，点击后直接全屏浪漫展示
   acceptBtn.addEventListener('click', () => {
-    if (isFullScreen) {
-      acceptBtn.style.display = 'none';
+    if (!isFullScreen) {
+      isFullScreen = true;
+      // 直接渲染最终浪漫展示
+      const finalImg = mainImg.src;
+      const finalMsg = values.message || '(没有输入内容)';
       centerBox.innerHTML = `
-        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;width:100vw;padding:10px;">
-          <img src="${lastImg || template.view.gif}" alt="" style="width:160px;height:160px;border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,0.02);max-width:90vw;object-fit:cover;">
-          <div style="margin:2.5rem 0 0 0;font-size:1.5rem;font-weight:700;color:#d72660;white-space:pre-line;text-align:center;max-width:90vw;">${escapeHtml(values.message || '(没有输入内容)')}</div>
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;
+          width:100vw;height:100vh;position:fixed;top:0;left:0;
+          background:linear-gradient(135deg,#ffe0f0 0%,#ffeffe 100%);
+          z-index:999;">
+          <img src="${finalImg}" alt="" style="width:180px;height:180px;border-radius:50%;box-shadow:0 0 15px rgba(255,107,107,0.15);margin-bottom:2rem;">
+          <div style="font-size:2.2rem;color:#d72660;font-weight:700;text-align:center;white-space:pre-line;max-width:90vw;">
+            ${escapeHtml(finalMsg)}
+          </div>
         </div>
       `;
     }
   });
 }
 
-// 辅助函数：设置"和好"按钮全屏样式
-function setAcceptButtonFullScreen(acceptBtn, centerBox, topWord, mainImg, mainTitle, rejectBtn) {
-  // 进入全屏前，保存图片和留言内容
+// 辅助函数：设置"和好"按钮全屏样式，最终展示用 message
+function setAcceptButtonFullScreen(acceptBtn, centerBox, topWord, mainImg, mainTitle, rejectBtn, finalMsg) {
+  // 进入全屏前，保存图片
   const finalImg = mainImg.src;
-  const finalMsg = mainTitle.textContent || '(没有输入内容)';
+  finalMsg = finalMsg || '(没有输入内容)';
 
   centerBox.innerHTML = `
     <div id="accept-fullscreen-btn"
@@ -165,7 +167,7 @@ function setAcceptButtonFullScreen(acceptBtn, centerBox, topWord, mainImg, mainT
         z-index:999;">
         <img src="${finalImg}" alt="" style="width:180px;height:180px;border-radius:50%;box-shadow:0 0 15px rgba(255,107,107,0.15);margin-bottom:2rem;">
         <div style="font-size:2.2rem;color:#d72660;font-weight:700;text-align:center;white-space:pre-line;max-width:90vw;">
-          ${finalMsg}
+          ${escapeHtml(finalMsg)}
         </div>
       </div>
     `;
