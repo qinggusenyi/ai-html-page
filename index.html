@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI创意互动网页生成平台</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>AI创意互动网页生成平台</h1>
+  </header>
+  <main>
+    <div id="template-gallery"></div>
+    <div id="editor-area" style="display:none;"></div>
+    <div id="preview-area" style="display:none;">
+      <h2>实时预览</h2>
+      <iframe id="preview-iframe" frameborder="0"></iframe>
+    </div>
+    <div id="generation-area" style="display:none;">
+      <button id="generate-btn">生成分享链接</button>
+      <input type="text" id="final-url" readonly>
+    </div>
+  </main>
+  <script src="js/templates.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
